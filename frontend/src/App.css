@@ -22,6 +22,24 @@
   display: flex;
   justify-content: center;
   gap: 20px;
+  align-items: center;
+}
+
+.logout-item {
+  margin-left: auto;
+}
+
+.logout-button {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border-radius: 4px;
 }
 
 .app-header nav a {

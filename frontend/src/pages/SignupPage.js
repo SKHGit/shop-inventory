@@ -1,28 +1,27 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import '../components/Form.css';
 
 const SignupPage = () => {
+  const { signup } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
+    role: 'staff',
   });
-  const navigate = useNavigate();
 
-  const { name, email, password } = formData;
+  const { name, email, password, role } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/users/register', { name, email, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/inventory');
+      await signup(name, email, password, role);
     } catch (err) {
-      console.error(err.response.data);
+      console.error(err);
     }
   };
 
@@ -60,6 +59,12 @@ const SignupPage = () => {
             minLength="6"
             required
           />
+        </div>
+        <div>
+          <select name="role" value={role} onChange={onChange}>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+          </select>
         </div>
         <input type="submit" value="Register" />
       </form>
