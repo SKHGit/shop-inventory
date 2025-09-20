@@ -43,13 +43,30 @@ const AddProductPage = () => {
       <h2>Add Product</h2>
       <form onSubmit={onSubmit}>
         <input type="text" placeholder="Name" name="name" value={name} onChange={onChange} required />
-        <input type="text" placeholder="Category" name="category" value={category} onChange={onChange} required />
-        <input type="text" placeholder="Brand" name="brand" value={brand} onChange={onChange} />
+        <select name="category" value={category} onChange={onChange} required>
+          <option value="">Select Category</option>
+          <option value="Electrical">Electrical</option>
+          <option value="Hardware">Hardware</option>
+          <option value="Plumbing">Plumbing</option>
+        </select>
+        <select name="brand" value={brand} onChange={onChange}>
+          <option value="">Select Brand</option>
+          <option value="Ketko">Ketko</option>
+          <option value="Anchor">Anchor</option>
+          <option value="Generic">Generic</option>
+        </select>
         <input type="text" placeholder="Supplier" name="supplier" value={supplier} onChange={onChange} />
         <input type="number" placeholder="Cost Price" name="costPrice" value={costPrice} onChange={onChange} required />
         <input type="number" placeholder="Selling Price" name="sellingPrice" value={sellingPrice} onChange={onChange} required />
         <input type="number" placeholder="Stock Quantity" name="stockQuantity" value={stockQuantity} onChange={onChange} required />
-        <input type="number" placeholder="Reorder Level" name="reorderLevel" value={reorderLevel} onChange={onChange} />
+        <select name="reorderLevel" value={reorderLevel} onChange={onChange}>
+          <option value="">Select Reorder Level</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="30">30</option>
+          <option value="40">40</option>
+          <option value="50">50</option>
+        </select>
         <input type="submit" value="Add Product" />
       </form>
     </div>

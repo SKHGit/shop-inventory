@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import React, { useState, useContext } from 'react';
+import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/AuthContext';
 import '../components/Form.css';
 
 const LoginPage = () => {
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
-  const navigate = useNavigate();
 
   const { email, password } = formData;
 
@@ -17,11 +17,9 @@ const LoginPage = () => {
   const onSubmit = async e => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/users/login', { email, password });
-      localStorage.setItem('token', res.data.token);
-      navigate('/inventory');
+      await login(email, password);
     } catch (err) {
-      console.error(err.response.data);
+      console.error(err);
     }
   };
 

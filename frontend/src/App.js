@@ -12,11 +12,11 @@ import './App.css';
 
 const App = () => {
   return (
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <MainApp />
-      </Router>
-    </AuthProvider>
+      </AuthProvider>
+    </Router>
   );
 };
 
@@ -33,7 +33,9 @@ const MainApp = () => {
               <>
                 <li><Link to="/inventory">Inventory</Link></li>
                 <li><Link to="/reports">Reports</Link></li>
-                <li><button onClick={logout}>Logout</button></li>
+                <li className="logout-item">
+                  <button onClick={logout} className="logout-button">Logout</button>
+                </li>
               </>
             ) : (
               <>
