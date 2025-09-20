@@ -17,22 +17,8 @@ form input[type="number"] {
   border: 1px solid #ccc;
 }
 
-form input[type="submit"],
-button {
-  width: 320px;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 5px;
-  border: none;
-  background-color: #282c34;
-  color: white;
-  cursor: pointer;
-  text-align: center;
-}
-
-button {
-  background-color: #61dafb;
-  color: #282c34;
+form input[type="submit"] {
+  width: auto;
 }
 
 table {

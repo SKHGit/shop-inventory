@@ -14,6 +14,20 @@ router.get('/', auth, (req, res) => {
     .then(products => res.json(products));
 });
 
+// @route   GET api/products/check-exists
+// @desc    Check if a product exists
+// @access  Private
+router.get('/check-exists', auth, (req, res) => {
+  Product.findOne({ name: req.query.name })
+    .then(product => {
+      if (product) {
+        return res.json({ exists: true });
+      }
+      res.json({ exists: false });
+    })
+    .catch(err => res.status(500).json({ success: false, error: err }));
+});
+
 // @route   GET api/products/:id
 // @desc    Get A Product
 // @access  Private
@@ -25,8 +39,11 @@ router.get('/:id', auth, (req, res) => {
 
 // @route   POST api/products
 // @desc    Create A Product
-// @access  Admin
-router.post('/', [auth, admin], (req, res) => {
+// @access  Private (Admin or Staff)
+router.post('/', auth, (req, res) => {
+  if (req.user.role !== 'admin' && req.user.role !== 'staff') {
+    return res.status(403).json({ msg: 'Access denied.' });
+  }
   const newProduct = new Product({
     name: req.body.name,
     category: req.body.category,
@@ -45,8 +62,11 @@ router.post('/', [auth, admin], (req, res) => {
 
 // @route   PUT api/products/:id
 // @desc    Update A Product
-// @access  Admin
-router.put('/:id', [auth, admin], (req, res) => {
+// @access  Private (Admin or Staff)
+router.put('/:id', auth, (req, res) => {
+  if (req.user.role !== 'admin' && req.user.role !== 'staff') {
+    return res.status(403).json({ msg: 'Access denied.' });
+  }
   Product.findByIdAndUpdate(req.params.id, req.body, { new: true })
     .then(product => res.json(product))
     .catch(err => res.status(404).json({ success: false }));
@@ -54,8 +74,11 @@ router.put('/:id', [auth, admin], (req, res) => {
 
 // @route   DELETE api/products/:id
 // @desc    Disable A Product
-// @access  Admin
-router.delete('/:id', [auth, admin], (req, res) => {
+// @access  Private (Admin or Staff)
+router.delete('/:id', auth, (req, res) => {
+  if (req.user.role !== 'admin' && req.user.role !== 'staff') {
+    return res.status(403).json({ msg: 'Access denied.' });
+  }
   Product.findByIdAndUpdate(req.params.id, { disabled: true }, { new: true })
     .then(() => res.json({ success: true }))
     .catch(err => res.status(404).json({ success: false }));

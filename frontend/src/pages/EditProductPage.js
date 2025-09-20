@@ -70,7 +70,7 @@ const EditProductPage = () => {
         <input type="number" placeholder="Selling Price" name="sellingPrice" value={sellingPrice} onChange={onChange} required />
         <input type="number" placeholder="Stock Quantity" name="stockQuantity" value={stockQuantity} onChange={onChange} required />
         <input type="number" placeholder="Reorder Level" name="reorderLevel" value={reorderLevel} onChange={onChange} />
-        <input type="submit" value="Update Product" />
+        <input type="submit" value="Update Product" className="btn" />
       </form>
     </div>
   );

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { auth } = require('../../middleware/auth');
+const { auth, admin } = require('../../middleware/auth');
 
 // User model
 const User = require('../../models/User');
@@ -11,52 +11,93 @@ const User = require('../../models/User');
 // @desc    Register new user
 // @access  Public
 router.post('/register', (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password } = req.body;
 
   // Simple validation
-  if(!name || !email || !password) {
+  if (!name || !email || !password) {
     return res.status(400).json({ msg: 'Please enter all fields' });
   }
 
-  User.findOne({ email })
-    .then(user => {
-      if(user) return res.status(400).json({ msg: 'User already exists' });
+  User.findOne({ email }).then(user => {
+    if (user) return res.status(400).json({ msg: 'User already exists' });
 
+    // Make the first registered user an admin
+    User.countDocuments().then(count => {
+      const role = count === 0 ? 'admin' : 'staff';
       const newUser = new User({
         name,
         email,
         password,
-        role
+        role,
       });
 
       // Create salt & hash
       bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(newUser.password, salt, (err, hash) => {
-          if(err) throw err;
+          if (err) throw err;
           newUser.password = hash;
-          newUser.save()
-            .then(user => {
-              jwt.sign(
-                { id: user.id, role: user.role },
-                'your_jwt_secret', // replace with a secret from config/env
-                { expiresIn: 3600 },
-                (err, token) => {
-                  if(err) throw err;
-                  res.json({
-                    token,
-                    user: {
-                      id: user.id,
-                      name: user.name,
-                      email: user.email,
-                      role: user.role
-                    }
-                  });
-                }
-              )
-            });
-        })
-      })
-    })
+          newUser.save().then(user => {
+            jwt.sign(
+              { id: user.id, role: user.role },
+              'your_jwt_secret',
+              { expiresIn: 3600 },
+              (err, token) => {
+                if (err) throw err;
+                res.json({
+                  token,
+                  user: {
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    role: user.role,
+                  },
+                });
+              }
+            );
+          });
+        });
+      });
+    });
+  });
+});
+
+// @route   POST api/users/add-staff
+// @desc    Add a staff user
+// @access  Private/Admin
+router.post('/add-staff', [auth, admin], (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ msg: 'Please enter all fields' });
+  }
+
+  User.findOne({ email }).then(user => {
+    if (user) return res.status(400).json({ msg: 'User already exists' });
+
+    const newUser = new User({
+      name,
+      email,
+      password,
+      role: 'staff',
+    });
+
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
+        if (err) throw err;
+        newUser.password = hash;
+        newUser.save().then(user => {
+          res.json({
+            user: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              role: user.role,
+            },
+          });
+        });
+      });
+    });
+  });
 });
 
 // @route   GET api/users/auth

@@ -48,7 +48,7 @@ const LoginPage = () => {
             required
           />
         </div>
-        <input type="submit" value="Login" />
+        <input type="submit" value="Login" className="btn" />
       </form>
       <p>
         Don't have an account? <Link to="/signup">Sign Up</Link>

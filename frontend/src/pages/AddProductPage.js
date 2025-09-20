@@ -31,6 +31,13 @@ const AddProductPage = () => {
           'Content-Type': 'application/json'
         }
       };
+
+      // Check if product exists
+      const checkRes = await axios.get(`/api/products/check-exists?name=${name}`, config);
+      if (checkRes.data.exists) {
+        return alert('Product with this name already exists.');
+      }
+
       await axios.post('/api/products', formData, config);
       navigate('/inventory');
     } catch (err) {
@@ -67,7 +74,7 @@ const AddProductPage = () => {
           <option value="40">40</option>
           <option value="50">50</option>
         </select>
-        <input type="submit" value="Add Product" />
+        <input type="submit" value="Add Product" className="btn" />
       </form>
     </div>
   );

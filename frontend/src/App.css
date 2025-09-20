@@ -29,17 +29,28 @@
   margin-left: auto;
 }
 
-.logout-button {
-  background-color: #f44336;
-  color: white;
+.btn {
+  background-color: #61dafb;
+  color: #282c34;
   border: none;
-  padding: 8px 12px;
+  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 0.9rem;
+  font-size: 1rem;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.logout-button {
+  width: auto;
+  padding: 8px 12px;
 }
 
 .app-header nav a {
