@@ -3,6 +3,7 @@ import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import '../components/Form.css';
+import './InventoryListPage.css';
 
 const InventoryListPage = () => {
   const [products, setProducts] = useState([]);
@@ -45,6 +46,13 @@ const InventoryListPage = () => {
     }
   };
 
+  const calculateTotalAmount = () => {
+    const total = filteredProducts.reduce((acc, product) => {
+      return acc + (product.basePrice * product.stockQuantity);
+    }, 0);
+    alert(`Total amount of all products: ${total.toFixed(2)}`);
+  };
+
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -58,33 +66,42 @@ const InventoryListPage = () => {
         placeholder="Search products..."
         onChange={e => setSearchTerm(e.target.value)}
       />
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Brand</th>
-            <th>Stock Quantity</th>
-            <th>Selling Price</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredProducts.map(product => (
-            <tr key={product._id}>
-              <td>{product.name}</td>
-              <td>{product.category}</td>
-              <td>{product.brand}</td>
-              <td>{product.stockQuantity}</td>
-              <td>{product.sellingPrice}</td>
-              <td>
-                <Link to={`/edit-product/${product._id}`} className="btn">Edit</Link>
-                <button onClick={() => handleDelete(product._id)} className="btn btn-delete">Delete</button>
-              </td>
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Brand</th>
+              <th>HSN</th>
+              <th>Base Price</th>
+              <th>Stock Quantity</th>
+              <th>Selling Price</th>
+              <th>Total Amount</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {filteredProducts.map(product => (
+              <tr key={product._id}>
+                <td>{product.name}</td>
+                <td>{product.category}</td>
+                <td>{product.brand}</td>
+                <td>{product.hsn}</td>
+                <td>{product.basePrice}</td>
+                <td>{product.stockQuantity}</td>
+                <td>{product.sellingPrice}</td>
+                <td>{(product.basePrice * product.stockQuantity).toFixed(2)}</td>
+                <td>
+                  <Link to={`/edit-product/${product._id}`} className="btn">Edit</Link>
+                  <button onClick={() => handleDelete(product._id)} className="btn btn-delete">Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <button onClick={calculateTotalAmount} className="btn">Total Amount</button>
     </div>
   );
 };

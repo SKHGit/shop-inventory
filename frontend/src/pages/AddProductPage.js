@@ -10,7 +10,8 @@ const AddProductPage = () => {
     category: '',
     brand: '',
     supplier: '',
-    costPrice: '',
+    hsn: '',
+    basePrice: '',
     sellingPrice: '',
     stockQuantity: '',
     reorderLevel: ''
@@ -18,7 +19,7 @@ const AddProductPage = () => {
   const { auth } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const { name, category, brand, supplier, costPrice, sellingPrice, stockQuantity, reorderLevel } = formData;
+  const { name, category, brand, supplier, hsn, basePrice, sellingPrice, stockQuantity, reorderLevel } = formData;
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -63,7 +64,8 @@ const AddProductPage = () => {
           <option value="Generic">Generic</option>
         </select>
         <input type="text" placeholder="Supplier" name="supplier" value={supplier} onChange={onChange} />
-        <input type="number" placeholder="Cost Price" name="costPrice" value={costPrice} onChange={onChange} required />
+        <input type="text" placeholder="HSN" name="hsn" value={hsn} onChange={onChange} />
+        <input type="number" placeholder="Base Price" name="basePrice" value={basePrice} onChange={onChange} required />
         <input type="number" placeholder="Selling Price" name="sellingPrice" value={sellingPrice} onChange={onChange} required />
         <input type="number" placeholder="Stock Quantity" name="stockQuantity" value={stockQuantity} onChange={onChange} required />
         <select name="reorderLevel" value={reorderLevel} onChange={onChange}>

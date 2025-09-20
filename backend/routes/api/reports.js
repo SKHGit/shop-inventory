@@ -4,6 +4,7 @@ const ExcelJS = require('exceljs');
 const PDFDocument = require('pdfkit');
 const { auth } = require('../../middleware/auth');
 const Product = require('../../models/Product');
+const Sale = require('../../models/Sale');
 
 // @route   GET api/reports/stock/excel
 // @desc    Generate Excel report of stock levels
@@ -76,5 +77,56 @@ router.get('/lowstock/pdf', auth, async (req, res) => {
   }
 });
 
+
+// @route   GET api/reports/sales
+// @desc    Generate Excel report of sales
+// @access  Private
+router.get('/sales', auth, async (req, res) => {
+    try {
+        const { startDate, endDate } = req.query;
+        const sales = await Sale.find({
+            date: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+            }
+        }).populate('product', 'name category');
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet('Sales Report');
+
+        worksheet.columns = [
+            { header: 'Product Name', key: 'productName', width: 30 },
+            { header: 'Category', key: 'category', width: 20 },
+            { header: 'Quantity', key: 'quantity', width: 15 },
+            { header: 'Price', key: 'price', width: 15 },
+            { header: 'Date', key: 'date', width: 20 }
+        ];
+
+        sales.forEach(sale => {
+            worksheet.addRow({
+                productName: sale.product.name,
+                category: sale.product.category,
+                quantity: sale.quantity,
+                price: sale.price,
+                date: sale.date
+            });
+        });
+
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        );
+        res.setHeader(
+            'Content-Disposition',
+            'attachment; filename=' + 'sales_report.xlsx'
+        );
+
+        await workbook.xlsx.write(res);
+        res.end();
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Server Error');
+    }
+});
 
 module.exports = router;
