@@ -6,6 +6,7 @@ import '../components/Form.css';
 
 const InventoryListPage = () => {
   const [products, setProducts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const { auth } = useContext(AuthContext);
 
   const fetchProducts = async () => {
@@ -44,10 +45,19 @@ const InventoryListPage = () => {
     }
   };
 
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div>
       <h2>Inventory List</h2>
-      <Link to="/add-product">Add Product</Link>
+      <Link to="/add-product" className="btn">Add Product</Link>
+      <input
+        type="text"
+        placeholder="Search products..."
+        onChange={e => setSearchTerm(e.target.value)}
+      />
       <table>
         <thead>
           <tr>
@@ -60,7 +70,7 @@ const InventoryListPage = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map(product => (
+          {filteredProducts.map(product => (
             <tr key={product._id}>
               <td>{product.name}</td>
               <td>{product.category}</td>
@@ -68,8 +78,8 @@ const InventoryListPage = () => {
               <td>{product.stockQuantity}</td>
               <td>{product.sellingPrice}</td>
               <td>
-                <Link to={`/edit-product/${product._id}`}>Edit</Link>
-                <button onClick={() => handleDelete(product._id)}>Delete</button>
+                <Link to={`/edit-product/${product._id}`} className="btn">Edit</Link>
+                <button onClick={() => handleDelete(product._id)} className="btn btn-delete">Delete</button>
               </td>
             </tr>
           ))}

@@ -8,6 +8,7 @@ import InventoryListPage from './pages/InventoryListPage';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
 import ReportsPage from './pages/ReportsPage';
+import AdminPage from './pages/AdminPage';
 import './App.css';
 
 const App = () => {
@@ -33,8 +34,11 @@ const MainApp = () => {
               <>
                 <li><Link to="/inventory">Inventory</Link></li>
                 <li><Link to="/reports">Reports</Link></li>
+                {auth.user && auth.user.role === 'admin' && (
+                  <li><Link to="/admin">Admin</Link></li>
+                )}
                 <li className="logout-item">
-                  <button onClick={logout} className="logout-button">Logout</button>
+                  <button onClick={logout} className="btn logout-button">Logout</button>
                 </li>
               </>
             ) : (
@@ -54,6 +58,7 @@ const MainApp = () => {
           <Route path="/add-product" element={<PrivateRoute><AddProductPage /></PrivateRoute>} />
           <Route path="/edit-product/:id" element={<PrivateRoute><EditProductPage /></PrivateRoute>} />
           <Route path="/reports" element={<PrivateRoute><ReportsPage /></PrivateRoute>} />
+          <Route path="/admin" element={<PrivateRoute><AdminPage /></PrivateRoute>} />
           <Route path="/" element={<Navigate to="/inventory" />} />
         </Routes>
       </main>

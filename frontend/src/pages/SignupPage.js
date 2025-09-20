@@ -66,7 +66,7 @@ const SignupPage = () => {
             <option value="admin">Admin</option>
           </select>
         </div>
-        <input type="submit" value="Register" />
+        <input type="submit" value="Sign Up" className="btn" />
       </form>
       <p>
         Already have an account? <Link to="/login">Login</Link>
