@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "scripts": {
+    "postinstall": "cd backend && npm install"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
