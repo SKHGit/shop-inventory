@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import ExcelJS from 'exceljs';
-// import PDFDocument from 'pdfkit';
+import PDFDocument from 'pdfkit';
 import { auth } from '../../middleware/auth.js';
 import Product from '../../models/Product.js';
 import Sale from '../../models/Sale.js';
