@@ -1,6 +1,15 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { fileURLToPath } from 'url';
+
+// Import models
+import Product from './models/Product.js';
+
+// Import routes
+import usersRoutes from './routes/api/users.js';
+import productsRoutes from './routes/api/products.js';
+import reportsRoutes from './routes/api/reports.js';
 
 const app = express();
 
@@ -19,8 +28,6 @@ mongoose
     seedDatabase();
   })
   .catch(err => console.log(err));
-
-const Product = require('./models/Product');
 
 const seedDatabase = async () => {
   try {
@@ -46,9 +53,9 @@ const seedDatabase = async () => {
 };
 
 // Use Routes
-app.use('/api/users', require('./routes/api/users'));
-app.use('/api/products', require('./routes/api/products'));
-app.use('/api/reports', require('./routes/api/reports'));
+app.use('/api/users', usersRoutes);
+app.use('/api/products', productsRoutes);
+app.use('/api/reports', reportsRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello from the backend!');
@@ -57,9 +64,9 @@ app.get('/', (req, res) => {
 const port = process.env.PORT || 5000;
 
 // Start the server only if this file is run directly
-if (require.main === module) {
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
   app.listen(port, () => console.log(`Server started on port ${port}`));
 }
 
 // Export the app for use in other files
-module.exports = app;
+export default app;

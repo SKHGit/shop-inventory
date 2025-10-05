@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
-function auth(req, res, next) {
+export function auth(req, res, next) {
   const token = req.header('x-auth-token');
 
   // Check for token
@@ -19,11 +19,9 @@ function auth(req, res, next) {
   }
 }
 
-function admin(req, res, next) {
+export function admin(req, res, next) {
   if (req.user.role !== 'admin') {
     return res.status(403).json({ msg: 'Admin resource. Access denied.' });
   }
   next();
 }
-
-module.exports = { auth, admin };

@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const { auth, admin } = require('../../middleware/auth');
+import { auth } from '../../middleware/auth.js';
 
 // Product Model
-const Product = require('../../models/Product');
-const Sale = require('../../models/Sale');
+import Product from '../../models/Product.js';
+import Sale from '../../models/Sale.js';
 
 // @route   GET api/products
 // @desc    Get All Products
@@ -129,4 +129,4 @@ router.post('/sale', auth, async (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const app = require('./index.js');
+import app from './index.js';
 
 export default {
   fetch: app,
