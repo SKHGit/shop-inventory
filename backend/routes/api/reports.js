@@ -1,10 +1,10 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
-const ExcelJS = require('exceljs');
-const PDFDocument = require('pdfkit');
-const { auth } = require('../../middleware/auth');
-const Product = require('../../models/Product');
-const Sale = require('../../models/Sale');
+import ExcelJS from 'exceljs';
+import PDFDocument from 'pdfkit';
+import { auth } from '../../middleware/auth.js';
+import Product from '../../models/Product.js';
+import Sale from '../../models/Sale.js';
 
 // @route   GET api/reports/stock/excel
 // @desc    Generate Excel report of stock levels
@@ -129,4 +129,4 @@ router.get('/sales', auth, async (req, res) => {
     }
 });
 
-module.exports = router;
+export default router;
