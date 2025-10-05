@@ -2,5 +2,5 @@
   "name": "shop-inventory-worker",
   "compatibility_date": "2025-10-03",
   "main": "backend/worker.js",
-  "node_compat": true
+  "nodejs_compat": true
 }

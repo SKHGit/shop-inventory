@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import ExcelJS from 'exceljs';
-import PDFDocument from 'pdfkit';
+// import PDFDocument from 'pdfkit';
 import { auth } from '../../middleware/auth.js';
 import Product from '../../models/Product.js';
 import Sale from '../../models/Sale.js';
@@ -47,35 +47,35 @@ router.get('/stock/excel', auth, async (req, res) => {
 // @route   GET api/reports/lowstock/pdf
 // @desc    Generate PDF report of low stock items
 // @access  Private
-router.get('/lowstock/pdf', auth, async (req, res) => {
-  try {
-    const products = await Product.find({
-      disabled: false,
-      $expr: { $lte: ['$stockQuantity', '$reorderLevel'] }
-    });
+// router.get('/lowstock/pdf', auth, async (req, res) => {
+//   try {
+//     const products = await Product.find({
+//       disabled: false,
+//       $expr: { $lte: ['$stockQuantity', '$reorderLevel'] }
+//     });
 
-    const doc = new PDFDocument();
-    let filename = 'low_stock_report.pdf';
-    filename = encodeURIComponent(filename);
-    res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
-    res.setHeader('Content-type', 'application/pdf');
+//     const doc = new PDFDocument();
+//     let filename = 'low_stock_report.pdf';
+//     filename = encodeURIComponent(filename);
+//     res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
+//     res.setHeader('Content-type', 'application/pdf');
 
-    doc.fontSize(25).text('Low Stock Report', { align: 'center' });
+//     doc.fontSize(25).text('Low Stock Report', { align: 'center' });
 
-    products.forEach(product => {
-      doc.fontSize(12).text(
-        `Name: ${product.name}, Stock: ${product.stockQuantity}, Reorder Level: ${product.reorderLevel}`
-      );
-    });
+//     products.forEach(product => {
+//       doc.fontSize(12).text(
+//         `Name: ${product.name}, Stock: ${product.stockQuantity}, Reorder Level: ${product.reorderLevel}`
+//       );
+//     });
 
-    doc.pipe(res);
-    doc.end();
+//     doc.pipe(res);
+//     doc.end();
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
-  }
-});
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Server Error');
+//   }
+// });
 
 
 // @route   GET api/reports/sales
